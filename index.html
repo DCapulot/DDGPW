@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>DDGPW IDE v3.0</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    display: flex;
+    height: 100vh;
+    font-family: 'Courier New', monospace;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    overflow: hidden;
+}
+
+/* ========================
+   EDITOR (esquerda)
+======================== */
+
+#editor-wrap {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #3c3c3c;
+}
+
+#editor-label {
+    padding: 6px 14px;
+    background: #2d2d2d;
+    font-size: 11px;
+    color: #888;
+    border-bottom: 1px solid #3c3c3c;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+#editor {
+    flex: 1;
+    padding: 16px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.7;
+    resize: none;
+    tab-size: 4;
+}
+
+/* ========================
+   PAINEL DIREITO
+======================== */
+
+#right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+#topbar {
+    padding: 8px 12px;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #3c3c3c;
+    flex-wrap: wrap;
+}
+
+#topbar .titulo {
+    font-size: 12px;
+    color: #569cd6;
+    font-weight: bold;
+    margin-right: auto;
+    letter-spacing: 1px;
+}
+
+/* ========================
+   BOTÕES
+======================== */
+
+button {
+    background: #0e639c;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    border-radius: 2px;
+    transition: background 0.15s;
+}
+
+button:hover { background: #1177bb; }
+button.perigo { background: #5a1d1d; }
+button.perigo:hover { background: #7a2d2d; }
+button.secundario { background: #3a3a3a; font-size: 11px; padding: 4px 10px; }
+button.secundario:hover { background: #505050; }
+
+/* ========================
+   ABAS
+======================== */
+
+#abas {
+    display: flex;
+    background: #252526;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.aba {
+    padding: 6px 18px;
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+}
+
+.aba.ativa {
+    color: #d4d4d4;
+    border-bottom-color: #569cd6;
+    background: #1e1e1e;
+}
+
+.aba:hover:not(.ativa) {
+    color: #bbb;
+    background: #2a2a2a;
+}
+
+/* ========================
+   PAINÉIS DE CONTEÚDO
+======================== */
+
+.painel {
+    display: none;
+    flex: 1;
+    overflow: auto;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.painel.ativo { display: block; }
+
+#painel-console { background: #0c0c0c; }
+#painel-tokens  { background: #1a1a1a; }
+#painel-ast     { background: #1a1a1a; }
+#painel-ajuda   { background: #141414; }
+
+/* ========================
+   SAÍDAS DO CONSOLE
+======================== */
+
+.saida       { color: #9cdcfe; }
+.saida-erro  { color: #f48771; }
+.saida-info  { color: #4ec9b0; font-size: 11px; }
+
+/* ========================
+   CORES DOS TOKENS
+======================== */
+
+.tok-reservada { color: #c586c0; }
+.tok-id        { color: #9cdcfe; }
+.tok-numero    { color: #b5cea8; }
+.tok-texto     { color: #ce9178; }
+.tok-operador  { color: #d4d4d4; }
+.tok-simbolo   { color: #808080; }
+
+/* ========================
+   AJUDA
+======================== */
+
+#painel-ajuda { color: #ccc; font-size: 12px; }
+#painel-ajuda h2 { color: #569cd6; font-size: 13px; margin: 14px 0 4px; border-bottom: 1px solid #3c3c3c; padding-bottom: 3px; }
+#painel-ajuda h2:first-child { margin-top: 0; }
+#painel-ajuda table { border-collapse: collapse; width: 100%; margin-bottom: 6px; }
+#painel-ajuda td { padding: 2px 8px; vertical-align: top; }
+#painel-ajuda td:first-child { color: #ce9178; white-space: nowrap; width: 38%; }
+#painel-ajuda tr:hover td { background: #1e1e2e; }
+
+/* ========================
+   STATUS BAR
+======================== */
+
+#statusbar {
+    padding: 4px 14px;
+    background: #007acc;
+    font-size: 11px;
+    color: white;
+    letter-spacing: 0.5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- EDITOR -->
+<div id="editor-wrap">
+    <div id="editor-label">📝 ddgpw v3.0 — editor</div>
+    <textarea id="editor" spellcheck="false">
+// ============================================
+// DDGPW v3.0 — Demo de todos os novos recursos
+// ============================================
+
+// --- CONSTANTE ---
+constante inteiro MAX = 100;
+imprimir("Máximo =", MAX);
+
+// --- VETOR ---
+inteiro notas[] = {9, 7, 8, 10, 6};
+imprimir("Notas[2] =", notas[2]);
+notas[0] = 10;
+imprimir("Notas[0] após mudança =", notas[0]);
+
+// --- ESCOLHA (switch) ---
+inteiro dia = 3;
+escolha (dia) {
+    caso 1: imprimir("Segunda"); parar;
+    caso 2: imprimir("Terça");   parar;
+    caso 3: imprimir("Quarta");  parar;
+    caso 4: imprimir("Quinta");  parar;
+    caso 5: imprimir("Sexta");   parar;
+    padrão: imprimir("Fim de semana");
+}
+
+// --- FAZER...ENQUANTO (do...while) ---
+inteiro cont = 0;
+fazer {
+    cont++;
+    imprimir("do-while cont =", cont);
+} enquanto (cont < 3);
+
+// --- INCREMENTO / DECREMENTO ---
+inteiro x = 5;
+x++;
+imprimir("x++ =", x);
+x--;
+imprimir("x-- =", x);
+
+// --- ATRIBUIÇÃO COMPOSTA ---
+inteiro y = 10;
+y += 5;
+imprimir("y += 5 →", y);
+y *= 2;
+imprimir("y *= 2 →", y);
+y -= 3;
+imprimir("y -= 3 →", y);
+y /= 3;
+imprimir("y /= 3 →", y);
+
+// --- OPERADOR TERNÁRIO ---
+inteiro idade = 20;
+texto status = (idade >= 18) ? "adulto" : "menor";
+imprimir("Status:", status);
+
+// --- OPERADORES BIT A BIT ---
+inteiro a = 12;  // 1100
+inteiro b = 10;  // 1010
+imprimir("a & b =", a & b);   // 1000 = 8
+imprimir("a | b =", a | b);   // 1110 = 14
+imprimir("a ^ b =", a ^ b);   // 0110 = 6
+imprimir("a << 1 =", a << 1); // 11000 = 24
+imprimir("a >> 1 =", a >> 1); // 110 = 6
+
+// --- SENÃO SE encadeado ---
+inteiro nota = 75;
+se (nota >= 90) {
+    imprimir("Conceito A");
+} senão se (nota >= 70) {
+    imprimir("Conceito B");
+} senão se (nota >= 50) {
+    imprimir("Conceito C");
+} senão {
+    imprimir("Reprovado");
+}
+
+// --- FUNÇÕES DE STRING ---
+texto nome = "DDGPW Linguagem";
+imprimir("Minúsculo:", minusculo(nome));
+imprimir("Tamanho:", tamanho(nome));
+imprimir("Fatiar(6,14):", fatiar(nome, 6, 14));
+imprimir("Substituir:", substituir(nome, "DDGPW", "Nova"));
+imprimir("Contem 'Ling'?", contem(nome, "Ling"));
+
+// --- FUNÇÕES MATEMÁTICAS ---
+imprimir("raiz(16) =", raiz(16));
+imprimir("potencia(2,8) =", potencia(2, 8));
+imprimir("piso(3.7) =", piso(3.7));
+imprimir("teto(3.2) =", teto(3.2));
+imprimir("absoluto(-42) =", absoluto(-42));
+imprimir("aleatorio_entre(1,10) =", aleatorio_entre(1, 10));
+
+// --- FUNÇÕES DE VETOR ---
+inteiro v[] = {5, 2, 8, 1, 9, 3};
+imprimir("Ordenado:", juntar(ordenar(v), ", "));
+empurrar(v, 99);
+imprimir("Após empurrar(99), tamanho:", tamanho_vetor(v));
+
+// --- VERIFICAÇÃO DE TIPO ---
+imprimir("tipo_de(42) =", tipo_de(42));
+imprimir("tipo_de('oi') =", tipo_de("oi"));
+imprimir("tipo_de(verdade) =", tipo_de(verdade));
+imprimir("eh_numero(3.14) =", eh_numero(3.14));
+    </textarea>
+</div>
+
+<!-- PAINEL DIREITO -->
+<div id="right">
+
+    <div id="topbar">
+        <span class="titulo">DDGPW v3.0</span>
+        <button onclick="executar()">▶ Executar</button>
+        <button class="perigo" onclick="limpar()">🧹 Limpar</button>
+    </div>
+
+    <div id="abas">
+        <div class="aba ativa" onclick="abrirAba('console')">Console</div>
+        <div class="aba"       onclick="abrirAba('tokens')">Tokens</div>
+        <div class="aba"       onclick="abrirAba('ast')">AST</div>
+        <div class="aba"       onclick="abrirAba('ajuda')">📖 Referência</div>
+    </div>
+
+    <div id="painel-console" class="painel ativo"></div>
+    <div id="painel-tokens"  class="painel"></div>
+    <div id="painel-ast"     class="painel"></div>
+    <div id="painel-ajuda"   class="painel">
+
+        <h2>Tipos de variável</h2>
+        <table>
+            <tr><td>inteiro x = 10</td><td>Número inteiro</td></tr>
+            <tr><td>decimal d = 3.14</td><td>Número com casas decimais</td></tr>
+            <tr><td>texto t = "oi"</td><td>Cadeia de caracteres</td></tr>
+            <tr><td>booleano b = verdade</td><td>Valor lógico (verdade/falso)</td></tr>
+            <tr><td>constante inteiro MAX = 99</td><td>Constante (imutável)</td></tr>
+        </table>
+
+        <h2>Vetores</h2>
+        <table>
+            <tr><td>inteiro v[5]</td><td>Vetor de 5 inteiros (nulos)</td></tr>
+            <tr><td>inteiro v[] = {1,2,3}</td><td>Vetor com valores iniciais</td></tr>
+            <tr><td>v[0] = 10</td><td>Atribuição de elemento</td></tr>
+            <tr><td>v[i]</td><td>Acesso a elemento</td></tr>
+        </table>
+
+        <h2>Controle de fluxo</h2>
+        <table>
+            <tr><td>se / senão se / senão</td><td>Condicional encadeada</td></tr>
+            <tr><td>escolha (x) { caso 1: ... }</td><td>switch/case</td></tr>
+            <tr><td>repetir (cond) { }</td><td>Loop while</td></tr>
+            <tr><td>fazer { } enquanto (cond)</td><td>Loop do…while</td></tr>
+            <tr><td>para i de 0 até 10 passo 2 { }</td><td>Loop for</td></tr>
+            <tr><td>parar / continuar</td><td>break / continue</td></tr>
+        </table>
+
+        <h2>Operadores</h2>
+        <table>
+            <tr><td>+= -= *= /= %=</td><td>Atribuição composta</td></tr>
+            <tr><td>++ --</td><td>Incremento / Decremento</td></tr>
+            <tr><td>cond ? a : b</td><td>Operador ternário</td></tr>
+            <tr><td>&amp; | ^ ~ &lt;&lt; &gt;&gt;</td><td>Bit a bit</td></tr>
+            <tr><td>e / ou / não</td><td>Lógico AND / OR / NOT</td></tr>
+        </table>
+
+        <h2>Funções de texto</h2>
+        <table>
+            <tr><td>tamanho(t)</td><td>Comprimento</td></tr>
+            <tr><td>maiusculo(t) / minusculo(t)</td><td>Caixa alta/baixa</td></tr>
+            <tr><td>fatiar(t, ini, fim)</td><td>Substring</td></tr>
+            <tr><td>substituir(t, de, por)</td><td>Substituição global</td></tr>
+            <tr><td>contem(t, busca)</td><td>Busca substring</td></tr>
+            <tr><td>comeca_com(t, p)</td><td>Começa com prefixo</td></tr>
+            <tr><td>termina_com(t, s)</td><td>Termina com sufixo</td></tr>
+            <tr><td>aparar(t)</td><td>Remover espaços (trim)</td></tr>
+            <tr><td>indice_de(t, busca)</td><td>Posição da substring</td></tr>
+            <tr><td>dividir_texto(t, sep)</td><td>Dividir em vetor</td></tr>
+            <tr><td>inverter_texto(t)</td><td>Inverter string</td></tr>
+            <tr><td>repetir_texto(t, n)</td><td>Repetir n vezes</td></tr>
+            <tr><td>char_em(t, i)</td><td>Caractere na posição</td></tr>
+            <tr><td>codigo_char(c)</td><td>Código ASCII/Unicode</td></tr>
+            <tr><td>char_de_codigo(n)</td><td>Char do código</td></tr>
+        </table>
+
+        <h2>Funções de vetor</h2>
+        <table>
+            <tr><td>criar_vetor(n, val)</td><td>Cria vetor de n elementos</td></tr>
+            <tr><td>tamanho_vetor(v)</td><td>Comprimento do vetor</td></tr>
+            <tr><td>empurrar(v, x)</td><td>Adiciona ao final (push)</td></tr>
+            <tr><td>remover_ultimo(v)</td><td>Remove do final (pop)</td></tr>
+            <tr><td>remover_primeiro(v)</td><td>Remove do início (shift)</td></tr>
+            <tr><td>inserir_inicio(v, x)</td><td>Insere no início (unshift)</td></tr>
+            <tr><td>fatiar_vetor(v, ini, fim)</td><td>Sub-vetor</td></tr>
+            <tr><td>ordenar(v)</td><td>Ordenar (retorna novo vetor)</td></tr>
+            <tr><td>inverter(v)</td><td>Inverter (retorna novo vetor)</td></tr>
+            <tr><td>juntar(v, sep)</td><td>Vetor → texto com separador</td></tr>
+            <tr><td>contem_vetor(v, x)</td><td>Verifica se elemento existe</td></tr>
+        </table>
+
+        <h2>Funções matemáticas</h2>
+        <table>
+            <tr><td>raiz(x)</td><td>Raiz quadrada</td></tr>
+            <tr><td>raiz_cubica(x)</td><td>Raiz cúbica</td></tr>
+            <tr><td>potencia(base, exp)</td><td>Potenciação</td></tr>
+            <tr><td>piso(x) / teto(x)</td><td>Arredondar para baixo/cima</td></tr>
+            <tr><td>truncar(x)</td><td>Remove parte decimal</td></tr>
+            <tr><td>absoluto(x)</td><td>Valor absoluto</td></tr>
+            <tr><td>sinal(x)</td><td>-1, 0 ou 1</td></tr>
+            <tr><td>maximo(a,b,...) / minimo(…)</td><td>Máximo / mínimo</td></tr>
+            <tr><td>seno(x) / cosseno(x) / tangente(x)</td><td>Trigonometria (rad)</td></tr>
+            <tr><td>logaritmo(x) / log10(x) / log2(x)</td><td>Logaritmos</td></tr>
+            <tr><td>aleatorio()</td><td>Número entre 0 e 1</td></tr>
+            <tr><td>aleatorio_entre(min, max)</td><td>Inteiro no intervalo</td></tr>
+            <tr><td>pi()</td><td>Valor de π</td></tr>
+        </table>
+
+        <h2>Verificação de tipo</h2>
+        <table>
+            <tr><td>tipo_de(v)</td><td>"inteiro","decimal","texto","booleano","vetor","nulo"</td></tr>
+            <tr><td>eh_numero(v)</td><td>Verdade se for número</td></tr>
+            <tr><td>eh_texto(v)</td><td>Verdade se for texto</td></tr>
+            <tr><td>eh_booleano(v)</td><td>Verdade se for booleano</td></tr>
+            <tr><td>eh_vetor(v)</td><td>Verdade se for vetor</td></tr>
+            <tr><td>eh_nulo(v)</td><td>Verdade se for nulo</td></tr>
+        </table>
+
+        <h2>Conversão de tipo</h2>
+        <table>
+            <tr><td>inteiro(x)</td><td>Converte para inteiro</td></tr>
+            <tr><td>decimal(x)</td><td>Converte para decimal</td></tr>
+            <tr><td>texto(x)</td><td>Converte para texto</td></tr>
+            <tr><td>booleano(x)</td><td>Converte para booleano</td></tr>
+        </table>
+
+    </div>
+
+    <div id="statusbar">Pronto</div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="tokens.js"></script>
+<script src="lexer.js"></script>
+<script src="parser.js"></script>
+<script src="interpreter.js"></script>
+
+<script>
+
+// ========================
+// ABAS
+// ========================
+
+function abrirAba(nome) {
+    const nomes = ['console', 'tokens', 'ast', 'ajuda'];
+    document.querySelectorAll('.aba').forEach((el, i) => {
+        el.classList.toggle('ativa', nomes[i] === nome);
+    });
+    document.querySelectorAll('.painel').forEach(p => p.classList.remove('ativo'));
+    document.getElementById('painel-' + nome).classList.add('ativo');
+}
+
+// ========================
+// UTILS
+// ========================
+
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+function setStatus(msg, cor = "#007acc") {
+    const s = document.getElementById("statusbar");
+    s.textContent = msg;
+    s.style.background = cor;
+}
+
+function classeToken(type) {
+    const reservadas = [
+        "SE","SENAO","REPETIR","FAZER","ENQUANTO","PARA","FUNCAO","RETORNAR",
+        "IMPRIMIR","CAPTURAR","PARAR","CONTINUAR","ESCOLHA","CASO","PADRAO",
+        "E","OU","NAO","INTEIRO","DECIMAL","BOOLEANO","TEXTO","CARACTERE","NULO",
+        "VERDADE","FALSO","CONSTANTE","USAR","DE","ATE","PASSO"
+    ];
+    if (reservadas.includes(type))  return "tok-reservada";
+    if (type === "IDENTIFICADOR")   return "tok-id";
+    if (type === "INTEIRO" || type === "DECIMAL") return "tok-numero";
+    if (type === "TEXTO")           return "tok-texto";
+    if (["MAIS","MENOS","VEZES","DIVIDIR","MODULO",
+         "IGUAL","IGUAL_IGUAL","DIFERENTE",
+         "MAIOR","MENOR","MAIOR_IGUAL","MENOR_IGUAL",
+         "MAIS_IGUAL","MENOS_IGUAL","VEZES_IGUAL","DIVIDIR_IGUAL","MODULO_IGUAL",
+         "MAIS_MAIS","MENOS_MENOS",
+         "BIT_E","BIT_OU","BIT_XOR","BIT_NAO","SHIFT_ESQ","SHIFT_DIR",
+         "INTERROGACAO"].includes(type)) return "tok-operador";
+    return "tok-simbolo";
+}
+
+// ========================
+// LIMPAR
+// ========================
+
+function limpar() {
+    document.getElementById("painel-console").innerHTML = "";
+    document.getElementById("painel-tokens").innerHTML = "";
+    document.getElementById("painel-ast").innerHTML = "";
+    setStatus("Limpo", "#555");
+}
+
+// ========================
+// EXECUTAR
+// ========================
+
+function executar() {
+    limpar();
+    const t0 = performance.now();
+
+    try {
+        const codigo = document.getElementById("editor").value;
+
+        // LEXER
+        const lexer = new Lexer(codigo);
+        const tokens = lexer.tokenize();
+
+        document.getElementById("painel-tokens").innerHTML =
+            tokens.map(t =>
+                `<span class="${classeToken(t.type)}">${t.type}</span>` +
+                ` <span style="color:#555">→</span>` +
+                ` <span style="color:#ce9178">${escHtml(t.value ?? "")}</span>`
+            ).join("<br>");
+
+        // PARSER
+        const parser = new Parser(tokens);
+        const ast = parser.parse();
+
+        document.getElementById("painel-ast").innerHTML =
+            `<pre style="color:#888;font-size:11px">${escHtml(JSON.stringify(ast, null, 2))}</pre>`;
+
+        // INTERPRETER
+        const consoleEl = document.getElementById("painel-console");
+        const logOriginal = console.log;
+
+        console.log = function(...args) {
+            consoleEl.innerHTML +=
+                `<div class="saida">${escHtml(args.join(" ")).replace(/\n/g, "<br>")}</div>`;
+        };
+
+        new Interpreter(ast).run();
+
+        console.log = logOriginal;
+
+        const ms = (performance.now() - t0).toFixed(1);
+        setStatus(`✓ Executado em ${ms}ms`, "#1a7a1a");
+
+    } catch (e) {
+        document.getElementById("painel-console").innerHTML +=
+            `<div class="saida-erro">⚠ ${escHtml(e.message)}</div>`;
+        setStatus("Erro na execução", "#7a1a1a");
+        console.error(e);
+    }
+}
+
+// ========================
+// TAB NO EDITOR
+// ========================
+
+document.getElementById("editor").addEventListener("keydown", function(e) {
+    if (e.key === "Tab") {
+        e.preventDefault();
+        const s = this.selectionStart;
+        this.value = this.value.substring(0, s) + "    " + this.value.substring(this.selectionEnd);
+        this.selectionStart = this.selectionEnd = s + 4;
+    }
+    // Ctrl+Enter executa
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        executar();
+    }
+});
+
+</script>
+</body>
+</html>
