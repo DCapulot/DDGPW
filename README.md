@@ -1,5 +1,7 @@
 # 🧠 DDGPW  — Linguagem de Programação e IDE
 
+[![GitHub](https://img.shields.io/badge/GitHub-DCapulot-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/DCapulot)
+
 Uma **linguagem de programação experimental desenvolvida em JavaScript**, acompanhada de uma IDE web própria para escrever, analisar e executar códigos utilizando a sintaxe da **DDGPW **.
 
 O projeto implementa as principais etapas de processamento de uma linguagem de programação: **Lexer, Parser, AST e Interpreter**, permitindo visualizar não apenas o resultado da execução, mas também como o código é processado internamente.
@@ -472,13 +474,7 @@ Este projeto tem como principais objetivos:
 * [ ] Mais recursos para vetores
 * [ ] Sistema de projetos
 
----
 
-## 🔗 Link do Projeto
-
-🔗 **Link do Projeto:** [Adicione aqui o link do projeto]
-
----
 
 ## 👨‍💻 Autor
 
