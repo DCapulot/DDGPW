@@ -1,6 +1,6 @@
-# 🧠 DDGPW v3.0 — Linguagem de Programação e IDE
+# 🧠 DDGPW  — Linguagem de Programação e IDE
 
-Uma **linguagem de programação experimental desenvolvida em JavaScript**, acompanhada de uma IDE web própria para escrever, analisar e executar códigos utilizando a sintaxe da **DDGPW v3.0**.
+Uma **linguagem de programação experimental desenvolvida em JavaScript**, acompanhada de uma IDE web própria para escrever, analisar e executar códigos utilizando a sintaxe da **DDGPW **.
 
 O projeto implementa as principais etapas de processamento de uma linguagem de programação: **Lexer, Parser, AST e Interpreter**, permitindo visualizar não apenas o resultado da execução, mas também como o código é processado internamente.
 
@@ -8,7 +8,7 @@ O projeto implementa as principais etapas de processamento de uma linguagem de p
 
 ## 🚀 Sobre o Projeto
 
-O **DDGPW v3.0** é um projeto desenvolvido para explorar, na prática, conceitos relacionados à criação de linguagens de programação e interpretadores.
+O **DDGPW  é um projeto desenvolvido para explorar, na prática, conceitos relacionados à criação de linguagens de programação e interpretadores.
 
 A aplicação disponibiliza um editor de código onde o usuário pode escrever comandos utilizando a sintaxe da DDGPW e executar o programa diretamente no navegador.
 
@@ -491,4 +491,4 @@ Este projeto tem como principais objetivos:
 
 ⭐ Se este projeto foi útil ou interessante para você, considere deixar uma estrela no repositório.
 
-> 🧠 **DDGPW v3.0 — transformando código em uma linguagem própria.**
+> 🧠 **DDGPW  — transformando código em uma linguagem própria.**
