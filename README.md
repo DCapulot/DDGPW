@@ -1,6 +1,6 @@
 # 🧠 DDGPW  — Linguagem de Programação e IDE
 
-[![Projeto Funcionando](https://img.shields.io/badge/Projeto-Funcionando-Acessar-2563EB?style=for-the-badge&logo=githubpages&logoColor=white)](https://dcapulot.github.io/DDGPW/)
+[![Projeto Funcionando](https://img.shields.io/badge/-PROJETO%20FUNCIONANDO-2563EB?style=for-the-badge&logo=githubpages&logoColor=white)](https://dcapulot.github.io/DDGPW/)
 
 Uma **linguagem de programação experimental desenvolvida em JavaScript**, acompanhada de uma IDE web própria para escrever, analisar e executar códigos utilizando a sintaxe da **DDGPW **.
 
