@@ -6,6 +6,12 @@ Uma **linguagem de programação experimental desenvolvida em JavaScript**, acom
 
 O projeto implementa as principais etapas de processamento de uma linguagem de programação: **Lexer, Parser, AST e Interpreter**, permitindo visualizar não apenas o resultado da execução, mas também como o código é processado internamente.
 
+## 📘 Aprenda a usar a DDGPW
+
+A DDGPW é uma linguagem de programação criada por mim. Para aprender a usá-la, acesse o guia da linguagem:
+
+[![Guia da Linguagem](https://img.shields.io/badge/Guia_da_Linguagem-Aprender_DDGPW-2ea44f?style=for-the-badge)](https://dcapulot.github.io/DDGPW-Guia-da-Linguagem/)
+
 ---
 
 ## 🚀 Sobre o Projeto
